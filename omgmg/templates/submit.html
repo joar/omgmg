@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block bootstrap_js_bottom %}
+{{ super() }}
+<script>
+    var MG_SERVER = '{{ config.MG_SERVER }}';
+</script>
+<script src="{{ url_for('static', filename='js/mediagoblin.js') }}"></script>
+<script src="{{ url_for('static', filename='js/omgmg.js') }}"></script>
+{% endblock %}
+{% block mg_body %}
+<div class="row">
+    <div class="span8">
+        <form id="submit-form" class="form form-horizontal">
+            <legend>Upload media</legend>
+            <input type="hidden" name="access_token" value="{{ session.access_token }}" />
+            <div class="control-group">
+                <label class="control-label" for="file">File</label>
+                <div class="controls">
+                    <input type="file" name="file" id="file" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                    <input type="text" name="title" id="title"
+                    placeholder="Extracted from filename?" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                    <textarea name="description" placeholder="You can use markdown here"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="license">License</label>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="license" value="" checked="true"/>
+                        All rights reserved
+                        <small>This should only ever be used if you own the copyright to the work.</small>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/licenses/by/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">
+                            CC-BY 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license"
+                            value="http://creativecommons.org/licenses/by-sa/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by-sa/3.0/">
+                            CC-BY-SA 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license"
+                            value="http://creativecommons.org/licenses/by-nd/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by-nd/3.0/">
+                            CC-BY-ND 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/licenses/by-nc/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by-nc/3.0/">
+                            CC-BY-NC 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+                            CC-BY-NC-SA 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/licenses/by-nc-nd/3.0/" />
+                        <a target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">
+                            CC-BY-NC-ND 3.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/publicdomain/zero/1.0/" />
+                        <a target="_blank" href="http://creativecommons.org/publicdomain/zero/1.0/">
+                            CC0 1.0
+                        </a>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="license" value="http://creativecommons.org/publicdomain/mark/1.0/" />
+                        <a target="_blank" href="http://creativecommons.org/publicdomain/mark/1.0/">
+                            Public Domain
+                        </a>
+                    </label>
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Submit" />
+                </div>
+            </div>
+        </form>
+        <div id="upload-progress" style="display: none">
+            <legend>Sending file</legend>
+            <div class="progress active progress-striped">
+                <div class="bar" style="width: 0%"></div>
+            </div>
+        </div>
+        <div id="upload-result" style="display: none">
+            <legend>Submitted!</legend>
+            <div id="upload-success" style="display: none">
+                <p>Your entry was successfully posted!</p>
+                <pre id="upload-success-data"></pre>
+            </div>
+            <div id="upload-error" style="display: none">
+                <p>Unfortunately there was an error while processing your request</p>
+                <div id="upload-error-message" class="alert alert-error"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

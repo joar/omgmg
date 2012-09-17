@@ -1,0 +1,24 @@
+{% extends 'bootstrap_responsive.html' %}
+{% block title %}OMG MG{% endblock %}
+
+{% block body_content %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">OMG MG</a>
+            <ul class="nav pull-right">
+                {% if session.user_info %}
+                <li><a href="/mg/submit">Upload media</a></li>
+                <li><a href="#">{{ session.user_info.username }}</a></li>
+                {% else %}
+                <li><a href="/mg/authorize">Log in with MediaGoblin</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    {% block mg_body %}
+    {% endblock %}
+</div>
+{% endblock %}
