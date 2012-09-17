@@ -17,7 +17,7 @@ Install
 To install OMGMG, run::
 
     git clone <path-to-git-repo>
-    cd omgomg/
+    cd omgmg/
     virtualenv .  # Create a python virtualenv
     source bin/activate  # Activate the virtualenv
     python setup.py develop  # Install the requirements
