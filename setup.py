@@ -10,4 +10,5 @@ if __name__ == '__main__':
             description='GNU MediaGoblin API client',
             install_requires=[
                 'Flask',
-                'flask-bootstrap'])
+                'flask-bootstrap',
+                'oauthlib'])
