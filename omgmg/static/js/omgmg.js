@@ -4,14 +4,15 @@ var OMGMG = function(form, endpoint, progressElement) {
 };
 
 (function(omg) {
-    omg.init = function (form, endpoint, progressElement) {
+    omg.init = function (form, endpoint, progressElementWrapper) {
         if ('string' == typeof form)
             form = document.getElementById(form);
         omg.form = form;
 
-        if ('string' == typeof progressElement)
-            progressElement = document.getElementById(progressElement);
-        omg.progressElement = progressElement;
+        if ('string' == typeof progressElementWrapper)
+            progressElementWrapper = document.getElementById(
+                progressElementWrapper);
+        omg.progressElementWrapper = progressElementWrapper;
 
         omg.mg = new MediaGoblin(endpoint);
 
@@ -72,8 +73,12 @@ var OMGMG = function(form, endpoint, progressElement) {
                         data: form[fieldName].value});
             });
 
+        fields.push({
+            name: 'callback_url',
+            data: window.PROCESSING_CALLBACK_URL});
+
         omg.form.style.display = 'none';
-        omg.progressElement.style.display = 'block';
+        omg.progressElementWrapper.style.display = 'block';
 
         omg.mg.post(
             '/api/submit?access_token='
@@ -94,28 +99,34 @@ var OMGMG = function(form, endpoint, progressElement) {
     };
 
     omg.onProgress = function(pe) {
-        var progressBar = omg.progressElement.getElementsByClassName('bar')[0];
+        var progressBar =
+            omg.progressElementWrapper.getElementsByClassName('bar')[0];
+        var progressElement =
+            omg.progressElementWrapper.getElementsByClassName('progress')[0];
 
         if (pe.lengthComputable) {
             var progress = pe.loaded / pe.total * 100;
 
+            console.log('progress: ', progress);
+
             if (100 == progress) {
                 progressBar.style.width = '100%';
-                omg.progressElement.classList.add('active');
-                omg.progressElement.classList.add('progress-striped');
+                progressElement.classList.add('active');
+                progressElement.classList.add('progress-striped');
                 return;
             }
 
-            if (omg.progressElement.classList.contains('active')) {
-                omg.progressElement.className = 'progress';
+            if (progressElement.classList.contains('active')) {
+                progressElement.className = 'progress';
             }
 
             progressBar.style.width = progress + '%';
         } else {
+            console.log('!lengComputable');
             progressBar.style.width = '100%';
 
-            omg.progressElement.classList.add('active');
-            omg.progressElement.classList.add('progress-striped');
+            progressElement.classList.add('active');
+            progressElement.classList.add('progress-striped');
         }
         console.log(pe);
     };
@@ -125,7 +136,7 @@ var OMGMG = function(form, endpoint, progressElement) {
         var uploadResult = document.getElementById('upload-result');
 
         uploadResult.style.display = 'block';
-        omg.progressElement.style.display = 'none';
+        omg.progressElementWrapper.style.display = 'none';
 
         if (response.error) {
             var uploadErrorElement = document.getElementById('upload-error');
@@ -139,10 +150,24 @@ var OMGMG = function(form, endpoint, progressElement) {
 
         var uploadSuccessElement = document.getElementById('upload-success');
 
+        if ('unprocessed' == response.state) {
+            document.getElementById('async-processing').style.display = 'block';
+            var processingPanelLink =
+                document.getElementById('processing-panel-link');
+            var link = response.user_permalink + 'panel';
+            processingPanelLink.href = processingPanelLink.textContent = link;
+        } else {
+            document.getElementById('sync-processing').style.display = 'block';
+            var entryLink = document.getElementById('entry-link');
+            entryLink.href = entryLink.textContent = response.permalink;
+        }
+
+        /*
         var successDataElement =
             document.getElementById('upload-success-data');
 
         successDataElement.textContent = JSON.stringify(response);
+        */
         uploadSuccessElement.style.display = 'block';
     };
 })(OMGMG);

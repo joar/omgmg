@@ -28,7 +28,8 @@ import json
 from oauthlib.oauth2.draft25 import WebApplicationClient
 from urllib2 import urlopen
 from urllib import urlencode
-from urlparse import parse_qs, urlunparse, urlparse
+from urlparse import urlunparse, urlparse
+from jinja2 import Markup
 
 from flask import Flask, render_template, request, url_for, redirect, session
 from flask.ext.bootstrap import Bootstrap
@@ -53,7 +54,11 @@ def index():
 
 @app.route('/mg/submit')
 def mg_submit():
-    return render_template('submit.html', config=app.config)
+    mg_server_url = Markup(json.dumps(app.config['MG_SERVER']))
+    processing_callback_url = Markup(json.dumps(url_for('processing_callback',
+        _external=True)))
+    return render_template('submit.html', mg_server_url=mg_server_url,
+            processing_callback_url=processing_callback_url)
 
 
 @app.route('/mg/logout')
@@ -103,10 +108,15 @@ def mg_callback():
             about_you=about_you)
 
 
+@app.route('/processing-callback', methods=['POST'])
+def processing_callback():
+    _log.debug('processing callback: {0}'.format(request.json))
+    return ''
+
+
 def mg_get_access_token(code):
     token_uri = mg_client.prepare_request_uri(
             MG_SERVER + '/oauth/access_token',
-            redirect_uri=url_for('mg_callback', _external=True),
             code=code)
 
     _log.debug('token uri: {0}'.format(token_uri))
@@ -126,6 +136,7 @@ def mg_get_data(uri, access_token, *qs):
             uri,
             '',
             urlencode({
+                'client_id': app.config['CLIENT_ID'],
                 'access_token': access_token}),
             None)
 

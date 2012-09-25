@@ -10,6 +10,7 @@
                 {% if session.user_info %}
                 <li><a href="/mg/submit">Upload media</a></li>
                 <li><a href="#">{{ session.user_info.username }}</a></li>
+                <li><a href="/mg/logout">Log out</a></li>
                 {% else %}
                 <li><a href="/mg/authorize">Log in with MediaGoblin</a></li>
                 {% endif %}

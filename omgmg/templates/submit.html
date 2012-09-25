@@ -2,7 +2,8 @@
 {% block bootstrap_js_bottom %}
 {{ super() }}
 <script>
-    var MG_SERVER = '{{ config.MG_SERVER }}';
+    var MG_SERVER = {{ mg_server_url }};
+    var PROCESSING_CALLBACK_URL = {{ processing_callback_url }};
 </script>
 <script src="{{ url_for('static', filename='js/mediagoblin.js') }}"></script>
 <script src="{{ url_for('static', filename='js/omgmg.js') }}"></script>
@@ -38,7 +39,6 @@
                     <label class="radio">
                         <input type="radio" name="license" value="" checked="true"/>
                         All rights reserved
-                        <small>This should only ever be used if you own the copyright to the work.</small>
                     </label>
                     <label class="radio">
                         <input type="radio" name="license" value="http://creativecommons.org/licenses/by/3.0/" />
@@ -107,11 +107,20 @@
         <div id="upload-result" style="display: none">
             <legend>Submitted!</legend>
             <div id="upload-success" style="display: none">
-                <p>Your entry was successfully posted!</p>
-                <pre id="upload-success-data"></pre>
+                <p>Your entry was successfully posted.</p>
+
+                <p id="async-processing" style="display: none">It seems that
+                the MediaGoblin server uses asynchronous processing. This means
+                that your entry is being processed right now. You can take a
+                look at the processing status at <a id="processing-panel-link"
+                href="#"></a>.</p>
+
+                <p id="sync-processing" style="display: none">You can view the
+                entry at <a id="entry-link" href=""></a>!</p>
             </div>
             <div id="upload-error" style="display: none">
-                <p>Unfortunately there was an error while processing your request</p>
+                <p>Unfortunately there was an error while processing your
+                request</p>
                 <div id="upload-error-message" class="alert alert-error"></div>
             </div>
         </div>
