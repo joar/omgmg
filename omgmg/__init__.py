@@ -117,7 +117,9 @@ def processing_callback():
 def mg_get_access_token(code):
     token_uri = mg_client.prepare_request_uri(
             MG_SERVER + '/oauth/access_token',
-            code=code)
+            code=code,
+            client_secret=app.config['SECRET_KEY'],
+    )
 
     _log.debug('token uri: {0}'.format(token_uri))
 

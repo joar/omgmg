@@ -1,5 +1,11 @@
+config.py
+
 /bin
 /include
 /lib
 /local
 /config.cfg
+/share
+/*.egg-info
+*.pyc
+*.pyo
