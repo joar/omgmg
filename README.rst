@@ -31,9 +31,14 @@ account from any of the sites listed at `wiki.mediagoblin.org/Live_instances
 <http://wiki.mediagoblin.org/Live_instances>`_ or `set up your own
 <http://docs.mediagoblin.org/siteadmin/deploying.html>`_.
 
-1. Copy ``config.py.sample`` to ``config.py``, then edit it to fit your needs.
-2. Start the server::
+
+1. Visit ``/oauth/client/register`` on your GNU MediaGoblin site to
+   register a new client. GNU MediaGoblin will give you values to fill
+   into your OMGMG ``config.py``.
+2. Copy ``config.py.sample`` to ``config.py``, then edit it to contain
+   the values provided when you registered your client.
+3. Start the server::
 
         python run.py
 
-3. Go to http://localhost:8181.
+4. Go to http://localhost:8181.
